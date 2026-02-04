@@ -1,0 +1,71 @@
+﻿{% extends "base.html" %}
+{% block title %}Mapa muscular | MuscleGain{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-logo">MUSCLE<span class="gain">GAIN</span></div>
+    <nav class="sidebar-menu">
+      <a href="{{ url_for('dashboard') }}">Inicio</a>
+      <a href="{{ url_for('register_session') }}">Registrar sesion</a>
+      <a href="{{ url_for('routines') }}">Rutinas</a>
+      <a href="{{ url_for('progress') }}">Progreso</a>
+      <a class="active" href="{{ url_for('muscle_map') }}">Mapa muscular</a>
+      {% if is_admin %}
+        <a href="{{ url_for('admin_muscle_map') }}">Admin mapa</a>
+      {% endif %}
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <a class="sidebar-logout" href="{{ url_for('logout') }}">Cerrar sesion</a>
+  </aside>
+
+  <main class="dashboard-main">
+    <section class="topbar">
+      <div>
+        <div class="page-kicker">Mapa muscular</div>
+        <h1 class="page-title">Selecciona un musculo</h1>
+        <p class="page-subtitle">Haz click en el cuerpo para ver el detalle.</p>
+      </div>
+    </section>
+
+    <section class="panel map-shell">
+      <div class="map-canvas">
+        <div class="muscle-image-wrap" id="muscleMap">
+          <img class="muscle-image" src="{{ url_for('static', filename='images/cuerpo.jpg') }}" alt="Mapa muscular humano" />
+          <button class="muscle-hotspot" data-muscle="pectorales" style="left:23%;top:17%;width:16%;height:12%;"></button>
+          <button class="muscle-hotspot" data-muscle="pectorales" style="left:61%;top:17%;width:16%;height:12%;"></button>
+          <button class="muscle-hotspot" data-muscle="hombros" style="left:14%;top:16%;width:10%;height:10%;"></button>
+          <button class="muscle-hotspot" data-muscle="hombros" style="left:76%;top:16%;width:10%;height:10%;"></button>
+          <button class="muscle-hotspot" data-muscle="biceps" style="left:10%;top:23%;width:10%;height:14%;"></button>
+          <button class="muscle-hotspot" data-muscle="triceps" style="left:80%;top:23%;width:10%;height:14%;"></button>
+          <button class="muscle-hotspot" data-muscle="abdomen" style="left:34%;top:26%;width:32%;height:18%;"></button>
+          <button class="muscle-hotspot" data-muscle="cuadriceps" style="left:28%;top:48%;width:18%;height:18%;"></button>
+          <button class="muscle-hotspot" data-muscle="cuadriceps" style="left:54%;top:48%;width:18%;height:18%;"></button>
+          <button class="muscle-hotspot" data-muscle="pantorrillas" style="left:32%;top:71%;width:16%;height:18%;"></button>
+          <button class="muscle-hotspot" data-muscle="pantorrillas" style="left:52%;top:71%;width:16%;height:18%;"></button>
+          <button class="muscle-hotspot" data-muscle="espalda" style="left:60%;top:20%;width:28%;height:20%;"></button>
+          <button class="muscle-hotspot" data-muscle="trapecios" style="left:60%;top:14%;width:20%;height:8%;"></button>
+          <button class="muscle-hotspot" data-muscle="gluteos" style="left:61%;top:46%;width:22%;height:12%;"></button>
+          <button class="muscle-hotspot" data-muscle="isquios" style="left:60%;top:58%;width:22%;height:16%;"></button>
+          <button class="muscle-hotspot" data-muscle="antebrazos" style="left:4%;top:33%;width:10%;height:12%;"></button>
+          <button class="muscle-hotspot" data-muscle="antebrazos" style="left:86%;top:33%;width:10%;height:12%;"></button>
+        </div>
+      </div>
+
+      <div class="muscle-info" id="muscleInfo">
+        <div class="section-title">Tierlist del musculo</div>
+        <div class="muscle-name" id="muscleName">Selecciona un musculo</div>
+        <div class="muscle-overview" id="muscleOverview">Tip: haz click en cualquier zona marcada.</div>
+        <div class="tier-list" id="tierList"></div>
+      </div>
+    </section>
+  </main>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    window.MUSCLES = {{ muscles|tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='js/muscle_map.js') }}"></script>
+{% endblock %}

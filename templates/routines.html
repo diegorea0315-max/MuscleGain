@@ -1,0 +1,122 @@
+﻿{% extends "base.html" %}
+{% block title %}Rutinas | MuscleGain{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-logo">MUSCLE<span class="gain">GAIN</span></div>
+    <nav class="sidebar-menu">
+      <a href="{{ url_for('dashboard') }}">Inicio</a>
+      <a href="{{ url_for('register_session') }}">Registrar sesion</a>
+      <a class="active" href="{{ url_for('routines') }}">Rutinas</a>
+      <a href="{{ url_for('progress') }}">Progreso</a>
+      <a href="{{ url_for('muscle_map') }}">Mapa muscular</a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <a class="sidebar-logout" href="{{ url_for('logout') }}">Cerrar sesion</a>
+  </aside>
+
+  <main class="dashboard-main">
+    <section class="topbar">
+      <div>
+        <div class="page-kicker">Rutinas</div>
+        <h1 class="page-title">Crea tu rutina</h1>
+        <p class="page-subtitle">Configura tus dias y lista los ejercicios que quieras.</p>
+      </div>
+    </section>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash">{{ messages[0] }}</div>
+      {% endif %}
+    {% endwith %}
+
+    <section class="panel">
+      <form method="POST" class="routine-form" id="routineForm">
+        <div class="form-row">
+          <label class="form-label">Nombre de rutina</label>
+          <input class="form-input" type="text" name="name" placeholder="Ej: Fuerza total" required>
+        </div>
+
+        <div class="routine-table-wrap">
+          <table class="routine-table routine-table-wide" id="routineTable">
+            <thead>
+              <tr>
+                <th>Dia</th>
+                <th>Ejercicios (uno por linea)</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="dayContainer">
+              <tr class="routine-row" data-row="0">
+                <td>
+                  <input class="table-input" type="text" name="day_label[]" placeholder="Ej: Lunes" required>
+                </td>
+                <td>
+                  <textarea class="table-input day-textarea" name="day_exercises[]" placeholder="Press banca&#10;Remo&#10;Sentadilla"></textarea>
+                </td>
+                <td>
+                  <button class="icon-btn remove-day" type="button" aria-label="Quitar">x</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <button class="btn btn-secondary add-row" id="addDayBtn" type="button">Agregar dia</button>
+
+        <div class="suggestions" data-exercises='{{ exercises|tojson }}'>
+          <div class="section-title">Sugerencias</div>
+          <div class="chip-list" id="exerciseChips">
+            {% for ex in exercises %}
+              <button class="chip" type="button" data-ex="{{ ex }}">{{ ex }}</button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-primary" type="submit">Guardar rutina</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">Rutinas guardadas</div>
+      <div class="routine-list">
+        {% if routines and routines|length > 0 %}
+          {% for r in routines %}
+            <div class="routine-card">
+              <div>
+                <div class="routine-name">{{ r.name }}</div>
+                <div class="routine-meta">{{ r.days }} dias</div>
+              </div>
+              <div class="routine-actions">
+                <a class="btn btn-secondary" href="{{ url_for('routine_edit', routine_id=r.id) }}">Editar</a>
+                <form method="POST" action="{{ url_for('routine_delete', routine_id=r.id) }}">
+                  <button class="btn btn-primary" type="submit">Borrar</button>
+                </form>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="empty-state">Aun no tienes rutinas. Crea la primera arriba.</div>
+        {% endif %}
+      </div>
+    </section>
+  </main>
+</div>
+
+<template id="dayTemplate">
+  <tr class="routine-row">
+    <td>
+      <input class="table-input" type="text" name="day_label[]" placeholder="Ej: Dia 1" required>
+    </td>
+    <td>
+      <textarea class="table-input day-textarea" name="day_exercises[]" placeholder="Ejercicio 1&#10;Ejercicio 2"></textarea>
+    </td>
+    <td>
+      <button class="icon-btn remove-day" type="button" aria-label="Quitar">x</button>
+    </td>
+  </tr>
+</template>
+{% endblock %}

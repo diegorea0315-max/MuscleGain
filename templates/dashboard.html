@@ -1,0 +1,153 @@
+﻿{% extends "base.html" %}
+{% block title %}Dashboard | MuscleGain{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">MUSCLE<span class="gain">GAIN</span></div>
+
+    <nav class="sidebar-menu">
+      <a class="active" href="{{ url_for('dashboard') }}">Inicio</a>
+      <a href="{{ url_for('register_session') }}">Registrar sesion</a>
+      <a href="{{ url_for('routines') }}">Rutinas</a>
+      <a href="{{ url_for('progress') }}">Progreso</a>
+      <a href="{{ url_for('muscle_map') }}">Mapa muscular</a>
+    </nav>
+
+    <div class="sidebar-spacer"></div>
+
+    <a class="sidebar-logout" href="{{ url_for('logout') }}">Cerrar sesion</a>
+  </aside>
+
+  <main class="dashboard-main">
+
+    <section class="topbar minimal-topbar">
+      <div>
+        <div class="page-kicker">Resumen</div>
+        <h1 class="page-title">MUSCLE<span class="gain">GAIN</span> / <span class="user">{{ username }}</span></h1>
+        <p class="page-subtitle">Resumen del dia con tus datos mas recientes.</p>
+      </div>
+
+      <div class="top-actions">
+        <a class="dash-btn primary" href="{{ url_for('register_session') }}">Registrar sesion</a>
+        <a class="dash-btn secondary" href="{{ url_for('routines') }}">Rutinas</a>
+      </div>
+    </section>
+
+    <section class="stats-grid minimal-stats kpi-strip">
+      <div class="stat-card">
+        <span class="stat-label">Racha</span>
+        <strong class="stat-value">{{ stats.streak }}</strong>
+        <span class="stat-hint">Dias seguidos</span>
+      </div>
+
+      <div class="stat-card">
+        <span class="stat-label">Entrenos (7 dias)</span>
+        <strong class="stat-value">{{ stats.sessions_7d }}</strong>
+        <span class="stat-hint">Meta semanal</span>
+      </div>
+
+      <div class="stat-card">
+        <span class="stat-label">Ultima sesion</span>
+        <strong class="stat-value">{{ stats.last_label }}</strong>
+        <span class="stat-hint">Registro reciente</span>
+      </div>
+    </section>
+
+    <section class="today-panel minimal-today exec-panel">
+      <div class="today-head">
+        <div>
+          <h2>Plan del dia</h2>
+          <p class="today-sub">Que toca hoy segun tu progreso.</p>
+        </div>
+        <div class="today-badge">{{ focus.chip }}</div>
+      </div>
+
+      <div class="today-grid minimal-grid exec-grid">
+        <div class="today-box">
+          <span class="mini-label">Accion del dia</span>
+          <div class="big">{{ focus.action_title }}</div>
+          <div class="mini">{{ focus.action_sub }}</div>
+        </div>
+
+        <div class="today-box">
+          <span class="mini-label">Siguiente paso</span>
+          <div class="big good">{{ focus.next_step }}</div>
+          <div class="mini">{{ focus.next_step_sub }}</div>
+        </div>
+      </div>
+
+      <div class="today-cta">
+        <a class="dash-btn primary" href="{{ url_for('register_session') }}">Registrar sesion</a>
+        <a class="dash-btn secondary" href="{{ url_for('progress') }}">Ver progreso</a>
+        <a class="dash-btn secondary" href="{{ url_for('muscle_map') }}">Mapa muscular</a>
+      </div>
+
+      <div class="minimal-lower exec-lower">
+        <div class="activity-list compact">
+          <div class="section-title">Actividad reciente</div>
+          <div class="activity-grid compact">
+            {% if activity and activity|length > 0 %}
+              {% for a in activity[:3] %}
+                <div class="note-line activity-line compact">
+                  <div>
+                    <strong class="activity-date">{{ a.date }}</strong>
+                    <div class="activity-meta">
+                      {{ a.duration_min }} min{% if a.note %} · {{ a.note }}{% endif %}
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            {% else %}
+              <div class="note-line">Aun no hay sesiones registradas.</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="notes-rotator minimal-notes" id="notesRotator" data-notes='{{ notes|tojson }}'>
+          <div class="notes-rotator-head">
+            <h3>Notas</h3>
+            <div class="notes-rotator-sub">Ideas y recordatorios.</div>
+          </div>
+
+          <div class="note-box compact">
+            <div class="note-text" id="noteText"></div>
+            <div class="note-controls minimal-controls">
+              <button class="note-btn" id="notePrev" type="button">Anterior</button>
+              <button class="note-btn" id="noteNext" type="button">Siguiente</button>
+              <button class="note-btn ghost" id="noteCopy" type="button">Copiar</button>
+              <button class="note-btn ghost" id="noteSave" type="button">Guardar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <p class="dash-footer">MUSCLE<span class="gain">GAIN</span>: DISCIPLINA CON HUMANIDAD.</p>
+
+  </main>
+</div>
+
+<div class="notes-modal" id="notesModal" aria-hidden="true">
+  <div class="notes-card" role="dialog" aria-modal="true">
+    <div class="notes-top">
+      <h3>Notas</h3>
+      <button class="notes-close" id="notesClose" type="button">x</button>
+    </div>
+
+    <div class="notes-list" id="notesList">
+      {% for n in notes %}
+        <div class="note-line">• {{ n }}</div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Listo.</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

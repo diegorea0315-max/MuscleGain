@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Admins | MuscleGain{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-logo">MUSCLE<span class="gain">GAIN</span></div>
+    <nav class="sidebar-menu">
+      <a href="{{ url_for('dashboard') }}">Inicio</a>
+      <a href="{{ url_for('muscle_map') }}">Mapa muscular</a>
+      <a href="{{ url_for('admin_muscle_map') }}">Admin mapa</a>
+      <a class="active" href="{{ url_for('admin_admins') }}">Admins</a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <a class="sidebar-logout" href="{{ url_for('logout') }}">Cerrar sesion</a>
+  </aside>
+
+  <main class="dashboard-main">
+    <section class="topbar minimal-topbar">
+      <div>
+        <div class="page-kicker">Admin</div>
+        <h1 class="page-title">Gestion de admins</h1>
+        <p class="page-subtitle">Solo tu puedes agregar o quitar permisos.</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="flash">{{ messages[0] }}</div>
+        {% endif %}
+      {% endwith %}
+
+      <form method="post" class="form-grid">
+        <div>
+          <label class="form-label">Usuario</label>
+          <input class="form-input" name="username" placeholder="Username exacto" required />
+        </div>
+        <div>
+          <label class="form-label">Accion</label>
+          <div class="form-actions">
+            <button class="dash-btn primary" name="action" value="add" type="submit">Agregar admin</button>
+            <button class="dash-btn secondary" name="action" value="remove" type="submit">Quitar admin</button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">Admins actuales</div>
+      <div class="chip-list">
+        {% for a in admins %}
+          <span class="chip">{{ a }}</span>
+        {% endfor %}
+      </div>
+    </section>
+  </main>
+</div>
+{% endblock %}

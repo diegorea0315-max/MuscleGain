@@ -1,0 +1,126 @@
+﻿{% extends "base.html" %}
+{% block title %}Registrar sesion | MuscleGain{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-logo">MUSCLE<span class="gain">GAIN</span></div>
+    <nav class="sidebar-menu">
+      <a href="{{ url_for('dashboard') }}">Inicio</a>
+      <a class="active" href="{{ url_for('register_session') }}">Registrar sesion</a>
+      <a href="{{ url_for('routines') }}">Rutinas</a>
+      <a href="{{ url_for('progress') }}">Progreso</a>
+      <a href="{{ url_for('muscle_map') }}">Mapa muscular</a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <a class="sidebar-logout" href="{{ url_for('logout') }}">Cerrar sesion</a>
+  </aside>
+
+  <main class="dashboard-main">
+    <section class="topbar">
+      <div>
+        <div class="page-kicker">Sesion</div>
+        <h1 class="page-title">Registrar sesion</h1>
+        <p class="page-subtitle">Ejercicios libres, series, reps y peso. Sin listas cerradas.</p>
+      </div>
+    </section>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash">{{ messages[0] }}</div>
+      {% endif %}
+    {% endwith %}
+
+    <section class="panel">
+      <form method="POST" class="session-form">
+        <div class="form-grid">
+          <div>
+            <label class="form-label">Fecha</label>
+            <input class="form-input" type="date" name="date" value="{{ today }}">
+          </div>
+          <div>
+            <label class="form-label">Duracion (min)</label>
+            <input class="form-input" type="number" name="duration_min" min="0" placeholder="60">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Nota de sesion</label>
+          <textarea class="form-input" name="note" rows="2" placeholder="Opcional"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="section-title">Sets</div>
+          <div id="setRows" class="set-rows">
+            <div class="set-row">
+              <div class="set-col">
+                <label class="form-label">Ejercicio</label>
+                <input class="form-input" type="text" name="exercise[]" list="exerciseList" placeholder="Ej: Press banca">
+              </div>
+              <div class="set-col small">
+                <label class="form-label">Series</label>
+                <input class="form-input" type="number" name="sets[]" min="1" value="3">
+              </div>
+              <div class="set-col small">
+                <label class="form-label">Reps</label>
+                <input class="form-input" type="number" name="reps[]" min="1" value="8">
+              </div>
+              <div class="set-col small">
+                <label class="form-label">Peso</label>
+                <input class="form-input" type="number" name="weight[]" step="0.5" min="0" placeholder="0">
+              </div>
+              <div class="set-col">
+                <label class="form-label">Notas</label>
+                <input class="form-input" type="text" name="set_note[]" placeholder="Opcional">
+              </div>
+              <div class="set-col action">
+                <button class="icon-btn remove-row" type="button" aria-label="Quitar">x</button>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-secondary add-row" id="addSetRow" type="button">Agregar set</button>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-primary" type="submit">Guardar sesion</button>
+          <a class="btn btn-secondary" href="{{ url_for('dashboard') }}">Volver al inicio</a>
+        </div>
+      </form>
+    </section>
+
+    <datalist id="exerciseList">
+      {% for ex in exercises %}
+        <option value="{{ ex }}"></option>
+      {% endfor %}
+    </datalist>
+  </main>
+</div>
+
+<template id="setRowTemplate">
+  <div class="set-row">
+    <div class="set-col">
+      <label class="form-label">Ejercicio</label>
+      <input class="form-input" type="text" name="exercise[]" list="exerciseList" placeholder="Ej: Sentadilla">
+    </div>
+    <div class="set-col small">
+      <label class="form-label">Series</label>
+      <input class="form-input" type="number" name="sets[]" min="1" value="3">
+    </div>
+    <div class="set-col small">
+      <label class="form-label">Reps</label>
+      <input class="form-input" type="number" name="reps[]" min="1" value="8">
+    </div>
+    <div class="set-col small">
+      <label class="form-label">Peso</label>
+      <input class="form-input" type="number" name="weight[]" step="0.5" min="0" placeholder="0">
+    </div>
+    <div class="set-col">
+      <label class="form-label">Notas</label>
+      <input class="form-input" type="text" name="set_note[]" placeholder="Opcional">
+    </div>
+    <div class="set-col action">
+      <button class="icon-btn remove-row" type="button" aria-label="Quitar">x</button>
+    </div>
+  </div>
+</template>
+{% endblock %}

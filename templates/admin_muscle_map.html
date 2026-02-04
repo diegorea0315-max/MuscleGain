@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Admin mapa | MuscleGain{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-logo">MUSCLE<span class="gain">GAIN</span></div>
+    <nav class="sidebar-menu">
+      <a href="{{ url_for('dashboard') }}">Inicio</a>
+      <a href="{{ url_for('muscle_map') }}">Mapa muscular</a>
+      <a class="active" href="{{ url_for('admin_muscle_map') }}">Admin mapa</a>
+      <a href="{{ url_for('admin_admins') }}">Admins</a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <a class="sidebar-logout" href="{{ url_for('logout') }}">Cerrar sesion</a>
+  </aside>
+
+  <main class="dashboard-main">
+    <section class="topbar minimal-topbar">
+      <div>
+        <div class="page-kicker">Admin</div>
+        <h1 class="page-title">Editor del mapa muscular</h1>
+        <p class="page-subtitle">Edita la tierlist y agrega videos con explicaciones.</p>
+      </div>
+    </section>
+
+    <section class="panel editor-shell">
+      <div class="editor-sidebar">
+        <div class="section-title">Musculos</div>
+        <div class="editor-list" id="muscleList"></div>
+        <div class="editor-hint">Selecciona un musculo para editar.</div>
+      </div>
+
+      <div class="editor-main">
+        <div class="editor-header">
+          <input id="muscleNameInput" class="form-input" placeholder="Nombre del musculo" />
+          <button class="dash-btn primary" id="saveMuscle">Guardar cambios</button>
+        </div>
+
+        <div class="editor-block">
+          <div class="section-title">Resumen general</div>
+          <div class="editor-toolbar" data-target="overviewEditor">
+            <button class="tool-btn" data-cmd="bold">Negrita</button>
+            <button class="tool-btn" data-cmd="italic">Cursiva</button>
+            <button class="tool-btn" data-cmd="insertUnorderedList">Lista</button>
+            <button class="tool-btn" data-cmd="insertOrderedList">Orden</button>
+            <button class="tool-btn" data-cmd="createLink">Link</button>
+          </div>
+          <div id="overviewEditor" class="editor-area" contenteditable="true"></div>
+        </div>
+
+        <div class="tier-editor">
+          {% for tier in ["S","A","B","C","D","E","F"] %}
+          <div class="tier-card" data-tier="{{ tier }}">
+            <div class="tier-badge">Tier {{ tier }}</div>
+            <input class="form-input tier-title" placeholder="Titulo del tier" />
+            <div class="editor-toolbar" data-target="tierBody{{ tier }}">
+              <button class="tool-btn" data-cmd="bold">Negrita</button>
+              <button class="tool-btn" data-cmd="italic">Cursiva</button>
+              <button class="tool-btn" data-cmd="insertUnorderedList">Lista</button>
+              <button class="tool-btn" data-cmd="insertOrderedList">Orden</button>
+              <button class="tool-btn" data-cmd="createLink">Link</button>
+            </div>
+            <div id="tierBody{{ tier }}" class="editor-area tier-body" contenteditable="true"></div>
+            <input class="form-input tier-video" placeholder="URL de video (opcional)" />
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    window.MUSCLES = {{ muscles|tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='js/admin_muscle_map.js') }}"></script>
+{% endblock %}

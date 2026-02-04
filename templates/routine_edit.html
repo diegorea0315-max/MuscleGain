@@ -1,0 +1,101 @@
+﻿{% extends "base.html" %}
+{% block title %}Editar rutina | MuscleGain{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-logo">MUSCLE<span class="gain">GAIN</span></div>
+    <nav class="sidebar-menu">
+      <a href="{{ url_for('dashboard') }}">Inicio</a>
+      <a href="{{ url_for('register_session') }}">Registrar sesion</a>
+      <a class="active" href="{{ url_for('routines') }}">Rutinas</a>
+      <a href="{{ url_for('progress') }}">Progreso</a>
+      <a href="{{ url_for('muscle_map') }}">Mapa muscular</a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <a class="sidebar-logout" href="{{ url_for('logout') }}">Cerrar sesion</a>
+  </aside>
+
+  <main class="dashboard-main">
+    <section class="topbar">
+      <div>
+        <div class="page-kicker">Rutinas</div>
+        <h1 class="page-title">Editar rutina</h1>
+        <p class="page-subtitle">Actualiza dias y ejercicios sin perder tu estilo.</p>
+      </div>
+    </section>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash">{{ messages[0] }}</div>
+      {% endif %}
+    {% endwith %}
+
+    <section class="panel">
+      <form method="POST" class="routine-form" id="routineForm">
+        <div class="form-row">
+          <label class="form-label">Nombre de rutina</label>
+          <input class="form-input" type="text" name="name" value="{{ routine.name }}" required>
+        </div>
+
+        <div class="routine-table-wrap">
+          <table class="routine-table routine-table-wide" id="routineTable">
+            <thead>
+              <tr>
+                <th>Dia</th>
+                <th>Ejercicios (uno por linea)</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="dayContainer">
+              {% for d in days %}
+                <tr class="routine-row">
+                  <td>
+                    <input class="table-input" type="text" name="day_label[]" value="{{ d.label }}" required>
+                  </td>
+                  <td>
+                    <textarea class="table-input day-textarea" name="day_exercises[]">{{ d.exercises }}</textarea>
+                  </td>
+                  <td>
+                    <button class="icon-btn remove-day" type="button" aria-label="Quitar">x</button>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <button class="btn btn-secondary add-row" id="addDayBtn" type="button">Agregar dia</button>
+
+        <div class="suggestions" data-exercises='{{ exercises|tojson }}'>
+          <div class="section-title">Sugerencias</div>
+          <div class="chip-list" id="exerciseChips">
+            {% for ex in exercises %}
+              <button class="chip" type="button" data-ex="{{ ex }}">{{ ex }}</button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-primary" type="submit">Guardar cambios</button>
+          <a class="btn btn-secondary" href="{{ url_for('routines') }}">Volver</a>
+        </div>
+      </form>
+    </section>
+  </main>
+</div>
+
+<template id="dayTemplate">
+  <tr class="routine-row">
+    <td>
+      <input class="table-input" type="text" name="day_label[]" placeholder="Ej: Dia 2" required>
+    </td>
+    <td>
+      <textarea class="table-input day-textarea" name="day_exercises[]" placeholder="Ejercicio 1&#10;Ejercicio 2"></textarea>
+    </td>
+    <td>
+      <button class="icon-btn remove-day" type="button" aria-label="Quitar">x</button>
+    </td>
+  </tr>
+</template>
+{% endblock %}

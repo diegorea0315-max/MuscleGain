@@ -1,0 +1,44 @@
+﻿{% extends "base.html" %}
+
+{% block title %}Registro | MuscleGain{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card">
+
+    <div class="auth-logo">MUSCLE<span class="gain">GAIN</span></div>
+    <h1 class="auth-title">Crear cuenta</h1>
+    <p class="auth-subtitle">Empieza a registrar progreso real</p>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="auth-alert">{{ messages[0] }}</div>
+      {% endif %}
+    {% endwith %}
+
+    <form class="auth-form" method="POST">
+      <input type="text" name="username" placeholder="Usuario" required>
+      <input type="email" name="email" placeholder="Correo" required>
+
+      <div class="input-group">
+        <input type="password" name="password" id="registerPassword" placeholder="Contrasena" required>
+        <button class="toggle-password" type="button" data-target="registerPassword" aria-label="Mostrar contrasena"></button>
+      </div>
+
+      <button class="btn btn-primary auth-btn" type="submit">
+        Crear cuenta
+      </button>
+    </form>
+
+    <p class="auth-helper">
+      Ya tienes cuenta?
+      <a href="{{ url_for('login') }}">Inicia sesion</a>
+    </p>
+
+    <p class="auth-security">
+      Tu contrasena se guarda cifrada (hash).
+    </p>
+
+  </div>
+</div>
+{% endblock %}

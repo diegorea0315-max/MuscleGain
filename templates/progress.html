@@ -1,0 +1,75 @@
+﻿{% extends "base.html" %}
+{% block title %}Progreso | MuscleGain{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-logo">MUSCLE<span class="gain">GAIN</span></div>
+    <nav class="sidebar-menu">
+      <a href="{{ url_for('dashboard') }}">Inicio</a>
+      <a href="{{ url_for('register_session') }}">Registrar sesion</a>
+      <a href="{{ url_for('routines') }}">Rutinas</a>
+      <a class="active" href="{{ url_for('progress') }}">Progreso</a>
+      <a href="{{ url_for('muscle_map') }}">Mapa muscular</a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <a class="sidebar-logout" href="{{ url_for('logout') }}">Cerrar sesion</a>
+  </aside>
+
+  <main class="dashboard-main">
+    <section class="topbar">
+      <div>
+        <div class="page-kicker">Progreso</div>
+        <h1 class="page-title">Sesiones recientes</h1>
+        <p class="page-subtitle">Historial de sets y resumen por ejercicio.</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">Ultimas sesiones</div>
+      <div class="session-list">
+        {% if workouts and workouts|length > 0 %}
+          {% for w in workouts %}
+            <div class="session-card">
+              <div class="session-head">
+                <div>
+                  <div class="session-date">{{ w.date }}</div>
+                  <div class="session-meta">{{ w.duration_min }} min{% if w.note %} · {{ w.note }}{% endif %}</div>
+                </div>
+              </div>
+              <div class="set-list">
+                {% for s in w.sets %}
+                  <div class="set-item">
+                    <div class="set-exercise">{{ s.exercise }}</div>
+                    <div class="set-values">{{ s.sets }}x{{ s.reps }} · {{ s.weight }} kg</div>
+                    {% if s.notes %}<div class="set-notes">{{ s.notes }}</div>{% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="empty-state">Aun no hay sesiones registradas.</div>
+        {% endif %}
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">Resumen por ejercicio</div>
+      <div class="summary-grid">
+        {% if summary and summary|length > 0 %}
+          {% for s in summary %}
+            <div class="summary-card">
+              <div class="summary-title">{{ s.exercise }}</div>
+              <div class="summary-line">Ultima vez: {{ s.last_date }}</div>
+              <div class="summary-line">PR estimado: {{ s.est_1rm }} kg</div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="empty-state">Registra sets para ver tu resumen.</div>
+        {% endif %}
+      </div>
+    </section>
+  </main>
+</div>
+{% endblock %}

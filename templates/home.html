@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <h1 class="hero-title">
+      Construye <span>fuerza</span><br>
+      Construye <span>carácter</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      El gimnasio no solo transforma cuerpos,<br>
+      transforma personas.
+    </p>
+
+    <div class="hero-buttons">
+      <a href="/register" class="btn btn-primary">Crear cuenta</a>
+      <a href="/login" class="btn btn-secondary">Iniciar sesión</a>
+    </div>
+  </div>
+</section>
+
+<section class="philosophy">
+  <h2>¿Por qué MuscleGain?</h2>
+
+  <div class="info-cards">
+    <div class="info-card" data-info="disciplina">
+      <h3>Disciplina</h3>
+      <span>Explorar</span>
+    </div>
+
+    <div class="info-card" data-info="ciencia">
+      <h3>Entrenar con ciencia</h3>
+      <span>Explorar</span>
+    </div>
+
+    <div class="info-card" data-info="proceso">
+      <h3>El proceso importa</h3>
+      <span>Explorar</span>
+    </div>
+  </div>
+</section>
+
+<!-- Modal info -->
+<div class="info-modal" id="infoModal">
+  <div class="info-modal-content">
+    <span class="close">&times;</span>
+    <h3 id="modalTitle"></h3>
+    <p id="modalText"></p>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/home.js') }}"></script>
+{% endblock %}
