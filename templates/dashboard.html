@@ -31,8 +31,6 @@
 
       <div class="top-actions">
         <a class="dash-btn primary" href="{{ url_for('register_session') }}">Registrar sesion</a>
-        <a class="dash-btn secondary" href="{{ url_for('routines') }}">Rutinas</a>
-        <button class="notes-btn" id="notesBtn" type="button">Notas</button>
       </div>
     </section>
 
@@ -53,32 +51,6 @@
         <span class="stat-label">Ultima sesion</span>
         <strong class="stat-value">{{ stats.last_label }}</strong>
         <span class="stat-hint">Registro reciente</span>
-      </div>
-    </section>
-
-    <section class="panel quick-panel">
-      <div class="section-title">Acciones rapidas</div>
-      <div class="quick-grid">
-        <button class="quick-card" type="button" data-title="Continuar entrenamiento" data-body="Registra tu sesion actual. Agrega sets, peso, reps y notas." data-link="{{ url_for('register_session') }}">
-          <div class="quick-title">Continuar entrenamiento</div>
-          <div class="quick-sub">Registro rapido.</div>
-        </button>
-        <button class="quick-card" type="button" data-title="Crear rutina" data-body="Define dias y ejercicios. Todo editable." data-link="{{ url_for('routines') }}">
-          <div class="quick-title">Crear rutina</div>
-          <div class="quick-sub">Plan semanal.</div>
-        </button>
-        <button class="quick-card" type="button" data-title="Registrar serie" data-body="Agrega series sueltas a una sesion." data-link="{{ url_for('register_session') }}">
-          <div class="quick-title">Registrar serie</div>
-          <div class="quick-sub">Detalle limpio.</div>
-        </button>
-        <button class="quick-card" type="button" data-title="Ver progreso" data-body="Historial, PR estimado y volumen por ejercicio." data-link="{{ url_for('progress') }}">
-          <div class="quick-title">Ver progreso</div>
-          <div class="quick-sub">Datos claros.</div>
-        </button>
-        <button class="quick-card" type="button" data-title="Ejercicios por musculo" data-body="Explora ejercicios por zona." data-link="{{ url_for('muscle_map') }}">
-          <div class="quick-title">Ejercicios por musculo</div>
-          <div class="quick-sub">Mapa corporal.</div>
-        </button>
       </div>
     </section>
 
@@ -103,12 +75,6 @@
           <div class="big good">{{ focus.next_step }}</div>
           <div class="mini">{{ focus.next_step_sub }}</div>
         </div>
-      </div>
-
-      <div class="today-cta">
-        <a class="dash-btn primary" href="{{ url_for('register_session') }}">Registrar sesion</a>
-        <a class="dash-btn secondary" href="{{ url_for('progress') }}">Ver progreso</a>
-        <a class="dash-btn secondary" href="{{ url_for('muscle_map') }}">Músculos</a>
       </div>
 
       <div class="minimal-lower exec-lower">
@@ -166,36 +132,7 @@
   </main>
 </div>
 
-<div class="notes-modal" id="notesModal" aria-hidden="true">
-  <div class="notes-card" role="dialog" aria-modal="true">
-    <div class="notes-top">
-      <h3>Notas</h3>
-      <button class="notes-close" id="notesClose" type="button">x</button>
-    </div>
-
-    <div class="notes-list" id="notesList">
-      {% for n in notes %}
-        <div class="note-line">• {{ n }}</div>
-      {% endfor %}
-    </div>
-  </div>
-</div>
-
 <div class="toast" id="toast">Listo.</div>
-
-<div class="quick-modal" id="quickModal" aria-hidden="true">
-  <div class="quick-card-modal" role="dialog" aria-modal="true">
-    <div class="quick-modal-head">
-      <h3 id="quickModalTitle">Accion</h3>
-      <button class="quick-modal-close" id="quickModalClose" type="button">x</button>
-    </div>
-    <div class="quick-modal-body" id="quickModalBody"></div>
-    <div class="quick-modal-actions">
-      <a class="btn btn-primary" id="quickModalGo" href="#">Ir ahora</a>
-      <button class="btn btn-secondary" id="quickModalCancel" type="button">Cerrar</button>
-    </div>
-  </div>
-</div>
 {% endblock %}
 
 {% block scripts %}

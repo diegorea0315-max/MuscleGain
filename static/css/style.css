@@ -645,57 +645,6 @@ h1,h2,h3,h4,h5,h6,.page-title,.auth-title{
   margin-bottom:8px;
 }
 
-.dash-footer{
-  margin-top:18px;
-  font-family:'Cinzel',serif;
-  font-size:.95rem;
-  letter-spacing:.4px;
-  opacity:.65;
-}
-
-.notes-modal{
-  position:fixed;
-  inset:0;
-  background: rgba(0,0,0,0.68);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index: 999;
-  padding:18px;
-}
-.notes-modal.open{ display:flex; }
-
-.notes-card{
-  width:min(520px, 92vw);
-  border-radius:18px;
-  background: rgba(15,15,15,0.98);
-  border:1px solid rgba(198,40,40,0.35);
-  box-shadow: 0 30px 120px rgba(0,0,0,0.75);
-  padding:18px;
-  animation:fadeUp .25s ease;
-}
-
-.notes-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
-  margin-bottom:12px;
-}
-.notes-top h3{
-  font-family:'Cinzel', serif;
-  letter-spacing:.4px;
-}
-
-.notes-close{
-  width:34px;
-  height:34px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.10);
-  background: rgba(255,255,255,0.04);
-  color: var(--text);
-  cursor:pointer;
-}
 .note-line{
   padding:10px 10px;
   border-radius:12px;
@@ -951,52 +900,6 @@ h1,h2,h3,h4,h5,h6,.page-title,.auth-title{
   line-height:1.5;
 }
 
-.quick-modal{
-  position:fixed;
-  inset:0;
-  background: rgba(0,0,0,0.7);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index: 998;
-  padding:18px;
-}
-.quick-modal.open{display:flex;}
-.quick-card-modal{
-  width:min(520px, 92vw);
-  border-radius:18px;
-  background: rgba(15,15,15,0.98);
-  border:1px solid rgba(198,40,40,0.35);
-  box-shadow: 0 30px 120px rgba(0,0,0,0.75);
-  padding:18px;
-  animation:fadeUp .25s ease;
-}
-.quick-modal-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
-  margin-bottom:10px;
-}
-.quick-modal-close{
-  width:34px;
-  height:34px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.10);
-  background: rgba(255,255,255,0.04);
-  color: var(--text);
-  cursor:pointer;
-}
-.quick-modal-body{
-  opacity:.8;
-  line-height:1.6;
-}
-.quick-modal-actions{
-  margin-top:16px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
 
 .map-shell{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:flex-start;}
 .map-canvas{display:flex;justify-content:center;}

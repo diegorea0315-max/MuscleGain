@@ -11,65 +11,6 @@ function toast(msg) {
   setTimeout(() => t.classList.remove("show"), 1200);
 }
 
-// Quick action cards -> modal
-(function quickCards() {
-  const modal = $("quickModal");
-  const title = $("quickModalTitle");
-  const body = $("quickModalBody");
-  const go = $("quickModalGo");
-  const close = $("quickModalClose");
-  const cancel = $("quickModalCancel");
-  const cards = document.querySelectorAll(".quick-card");
-
-  if (!modal || !cards.length) return;
-
-  function openModal(card) {
-    title.textContent = card.dataset.title || "Accion";
-    body.textContent = card.dataset.body || "";
-    go.setAttribute("href", card.dataset.link || "#");
-    modal.classList.add("open");
-    modal.setAttribute("aria-hidden", "false");
-  }
-
-  function closeModal() {
-    modal.classList.remove("open");
-    modal.setAttribute("aria-hidden", "true");
-  }
-
-  cards.forEach((card) => card.addEventListener("click", () => openModal(card)));
-  close?.addEventListener("click", closeModal);
-  cancel?.addEventListener("click", closeModal);
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) closeModal();
-  });
-})();
-
-// Modal Notes (arriba derecha)
-(function modalNotes() {
-  const btn = $("notesBtn");
-  const modal = $("notesModal");
-  const close = $("notesClose");
-
-  if (!btn || !modal || !close) return;
-
-  btn.addEventListener("click", () => {
-    modal.classList.add("open");
-    modal.setAttribute("aria-hidden", "false");
-  });
-
-  close.addEventListener("click", () => {
-    modal.classList.remove("open");
-    modal.setAttribute("aria-hidden", "true");
-  });
-
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      modal.classList.remove("open");
-      modal.setAttribute("aria-hidden", "true");
-    }
-  });
-})();
-
 // Notes Rotator (carrusel)
 (function rotator() {
   const root = $("notesRotator");
