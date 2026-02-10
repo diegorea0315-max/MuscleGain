@@ -24,31 +24,48 @@
       <div>
         <div class="page-kicker">Mapa muscular</div>
         <h1 class="page-title">Selecciona un musculo</h1>
-        <p class="page-subtitle">Haz click en el cuerpo para ver el detalle.</p>
+        <p class="page-subtitle">Elige vista frontal o posterior para mas precision.</p>
       </div>
     </section>
 
     <section class="panel map-shell">
       <div class="map-canvas">
-        <div class="muscle-image-wrap" id="muscleMap">
-          <img class="muscle-image" src="{{ url_for('static', filename='images/cuerpo.jpg') }}" alt="Mapa muscular humano" />
-          <button class="muscle-hotspot" data-muscle="pectorales" style="left:23%;top:17%;width:16%;height:12%;"></button>
-          <button class="muscle-hotspot" data-muscle="pectorales" style="left:61%;top:17%;width:16%;height:12%;"></button>
-          <button class="muscle-hotspot" data-muscle="hombros" style="left:14%;top:16%;width:10%;height:10%;"></button>
-          <button class="muscle-hotspot" data-muscle="hombros" style="left:76%;top:16%;width:10%;height:10%;"></button>
-          <button class="muscle-hotspot" data-muscle="biceps" style="left:10%;top:23%;width:10%;height:14%;"></button>
-          <button class="muscle-hotspot" data-muscle="triceps" style="left:80%;top:23%;width:10%;height:14%;"></button>
-          <button class="muscle-hotspot" data-muscle="abdomen" style="left:34%;top:26%;width:32%;height:18%;"></button>
-          <button class="muscle-hotspot" data-muscle="cuadriceps" style="left:28%;top:48%;width:18%;height:18%;"></button>
-          <button class="muscle-hotspot" data-muscle="cuadriceps" style="left:54%;top:48%;width:18%;height:18%;"></button>
-          <button class="muscle-hotspot" data-muscle="pantorrillas" style="left:32%;top:71%;width:16%;height:18%;"></button>
-          <button class="muscle-hotspot" data-muscle="pantorrillas" style="left:52%;top:71%;width:16%;height:18%;"></button>
-          <button class="muscle-hotspot" data-muscle="espalda" style="left:60%;top:20%;width:28%;height:20%;"></button>
-          <button class="muscle-hotspot" data-muscle="trapecios" style="left:60%;top:14%;width:20%;height:8%;"></button>
-          <button class="muscle-hotspot" data-muscle="gluteos" style="left:61%;top:46%;width:22%;height:12%;"></button>
-          <button class="muscle-hotspot" data-muscle="isquios" style="left:60%;top:58%;width:22%;height:16%;"></button>
-          <button class="muscle-hotspot" data-muscle="antebrazos" style="left:4%;top:33%;width:10%;height:12%;"></button>
-          <button class="muscle-hotspot" data-muscle="antebrazos" style="left:86%;top:33%;width:10%;height:12%;"></button>
+        <div class="map-tabs" role="tablist" aria-label="Vista del cuerpo">
+          <button class="map-tab active" type="button" data-view="front" role="tab" aria-selected="true">Frontal</button>
+          <button class="map-tab" type="button" data-view="back" role="tab" aria-selected="false">Posterior</button>
+        </div>
+
+        <div class="muscle-view active" data-view="front" role="tabpanel">
+          <div class="muscle-image-wrap split" id="muscleMapFront">
+            <img class="muscle-image split front" src="{{ url_for('static', filename='images/cuerpo.jpg') }}" alt="Mapa muscular frontal" />
+            <button class="muscle-hotspot" data-muscle="pectorales" style="left:26%;top:18%;width:20%;height:12%;"></button>
+            <button class="muscle-hotspot" data-muscle="pectorales" style="left:54%;top:18%;width:20%;height:12%;"></button>
+            <button class="muscle-hotspot" data-muscle="hombros" style="left:12%;top:14%;width:16%;height:10%;"></button>
+            <button class="muscle-hotspot" data-muscle="hombros" style="left:72%;top:14%;width:16%;height:10%;"></button>
+            <button class="muscle-hotspot" data-muscle="biceps" style="left:8%;top:24%;width:14%;height:14%;"></button>
+            <button class="muscle-hotspot" data-muscle="biceps" style="left:78%;top:24%;width:14%;height:14%;"></button>
+            <button class="muscle-hotspot" data-muscle="antebrazos" style="left:6%;top:36%;width:14%;height:12%;"></button>
+            <button class="muscle-hotspot" data-muscle="antebrazos" style="left:80%;top:36%;width:14%;height:12%;"></button>
+            <button class="muscle-hotspot" data-muscle="abdomen" style="left:32%;top:28%;width:36%;height:20%;"></button>
+            <button class="muscle-hotspot" data-muscle="cuadriceps" style="left:30%;top:50%;width:20%;height:20%;"></button>
+            <button class="muscle-hotspot" data-muscle="cuadriceps" style="left:50%;top:50%;width:20%;height:20%;"></button>
+            <button class="muscle-hotspot" data-muscle="pantorrillas" style="left:32%;top:74%;width:18%;height:18%;"></button>
+            <button class="muscle-hotspot" data-muscle="pantorrillas" style="left:50%;top:74%;width:18%;height:18%;"></button>
+          </div>
+        </div>
+
+        <div class="muscle-view" data-view="back" role="tabpanel">
+          <div class="muscle-image-wrap split" id="muscleMapBack">
+            <img class="muscle-image split back" src="{{ url_for('static', filename='images/cuerpo.jpg') }}" alt="Mapa muscular posterior" />
+            <button class="muscle-hotspot" data-muscle="trapecios" style="left:36%;top:12%;width:28%;height:10%;"></button>
+            <button class="muscle-hotspot" data-muscle="espalda" style="left:28%;top:20%;width:44%;height:24%;"></button>
+            <button class="muscle-hotspot" data-muscle="triceps" style="left:10%;top:24%;width:14%;height:14%;"></button>
+            <button class="muscle-hotspot" data-muscle="triceps" style="left:76%;top:24%;width:14%;height:14%;"></button>
+            <button class="muscle-hotspot" data-muscle="gluteos" style="left:34%;top:46%;width:32%;height:12%;"></button>
+            <button class="muscle-hotspot" data-muscle="isquios" style="left:32%;top:58%;width:36%;height:16%;"></button>
+            <button class="muscle-hotspot" data-muscle="pantorrillas" style="left:32%;top:74%;width:18%;height:18%;"></button>
+            <button class="muscle-hotspot" data-muscle="pantorrillas" style="left:50%;top:74%;width:18%;height:18%;"></button>
+          </div>
         </div>
       </div>
 

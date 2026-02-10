@@ -1,11 +1,28 @@
-const tierList = document.getElementById("tierList");
+﻿const tierList = document.getElementById("tierList");
 const muscleName = document.getElementById("muscleName");
 const muscleOverview = document.getElementById("muscleOverview");
 const hotspots = Array.from(document.querySelectorAll(".muscle-hotspot"));
+const tabs = Array.from(document.querySelectorAll(".map-tab"));
+const views = Array.from(document.querySelectorAll(".muscle-view"));
 
 function clearActive() {
   hotspots.forEach((b) => b.classList.remove("active"));
 }
+
+function setView(view) {
+  if (!views.length) return;
+  views.forEach((v) => v.classList.toggle("active", v.dataset.view === view));
+  tabs.forEach((t) => {
+    const active = t.dataset.view === view;
+    t.classList.toggle("active", active);
+    t.setAttribute("aria-selected", active ? "true" : "false");
+  });
+  clearActive();
+}
+
+tabs.forEach((btn) => {
+  btn.addEventListener("click", () => setView(btn.dataset.view));
+});
 
 function normalizeVideo(url) {
   if (!url) return "";
@@ -66,6 +83,8 @@ hotspots.forEach((btn) => {
     loadMuscle(btn.dataset.muscle);
   });
 });
+
+if (tabs.length) setView("front");
 
 if (window.MUSCLES && window.MUSCLES.length) {
   loadMuscle(window.MUSCLES[0].slug);

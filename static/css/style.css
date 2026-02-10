@@ -1012,3 +1012,58 @@ body{
   0%{box-shadow:0 0 0 rgba(198,40,40,0);}
   100%{box-shadow:0 0 40px rgba(198,40,40,0.6);}
 }
+
+/* Muscle map split view */
+.map-canvas{
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+}
+.map-tabs{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.map-tab{
+  padding:8px 12px;
+  border-radius:999px;
+  background: rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.12);
+  color: var(--text);
+  font-size:.8rem;
+  cursor:pointer;
+  transition: all .2s ease;
+}
+.map-tab.active{
+  background: rgba(255,60,60,0.18);
+  border-color: rgba(255,60,60,0.45);
+  color:#fff;
+}
+.map-tab:focus-visible{
+  outline:2px solid rgba(255,60,60,0.65);
+  outline-offset:2px;
+}
+.muscle-view{
+  display:none;
+  width:100%;
+}
+.muscle-view.active{
+  display:flex;
+  justify-content:center;
+}
+.muscle-image-wrap.split{
+  overflow:hidden;
+  width:min(520px, 90vw);
+}
+.muscle-image.split{
+  width:200%;
+  height:auto;
+  display:block;
+  max-width:none;
+  transform: translateX(0);
+  pointer-events:none;
+}
+.muscle-image.split.back{
+  transform: translateX(-50%);
+}
