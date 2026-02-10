@@ -998,32 +998,44 @@ h1,h2,h3,h4,h5,h6,.page-title,.auth-title{
   flex-wrap:wrap;
 }
 
-.map-shell{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:center;}
+.map-shell{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:flex-start;}
 .map-canvas{display:flex;justify-content:center;}
-.muscle-image-wrap{
-  position:relative;
-  width:min(440px, 86vw);
-  background: rgba(0,0,0,0.2);
+.cuerpo-container{
+  width: min(540px, 90vw);
+  background: rgba(0,0,0,0.22);
   border-radius:18px;
   border:1px solid rgba(255,255,255,0.08);
-  padding:10px;
+  padding:12px;
 }
-.muscle-image{
+.cuerpo-svg{
   width:100%;
   height:auto;
   display:block;
-  border-radius:12px;
 }
-.muscle-hotspot{
-  position:absolute;
-  border:none;
-  background: rgba(255,60,60,0.18);
-  border-radius:12px;
+.musculo-group{
   cursor:pointer;
-  transition: all .2s ease;
 }
-.muscle-hotspot:hover{background: rgba(255,60,60,0.35);}
-.muscle-hotspot.active{background: rgba(255,60,60,0.6);}
+.hitbox{
+  fill: rgba(255,60,60,0.01);
+  stroke:none;
+  pointer-events: all;
+}
+.musculo{
+  fill: rgba(255,60,60,0.12);
+  stroke: rgba(255,60,60,0.45);
+  stroke-width: 2;
+  opacity: 0;
+  transition: opacity .18s ease, fill .18s ease;
+}
+.musculo-group:hover .musculo{
+  opacity: 1;
+  fill: rgba(255,60,60,0.22);
+}
+.musculo-group.active .musculo{
+  opacity: 1;
+  fill: rgba(255,60,60,0.35);
+  stroke: rgba(255,60,60,0.75);
+}
 .muscle-info{padding:10px;}
 .muscle-name{font-size:1.2rem;font-weight:700;margin:8px 0;}
 .muscle-overview{opacity:.7;line-height:1.6;margin-bottom:12px;}

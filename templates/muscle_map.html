@@ -24,7 +24,7 @@
       <div>
         <div class="page-kicker">Músculos</div>
         <h1 class="page-title">Selecciona un musculo</h1>
-        <p class="page-subtitle">Elige vista frontal o posterior para mas precision.</p>
+        <p class="page-subtitle">Elige vista frontal o posterior.</p>
       </div>
     </section>
 
@@ -36,43 +36,22 @@
         </div>
 
         <div class="muscle-view active" data-view="front" role="tabpanel">
-          <div class="muscle-image-wrap split" id="muscleMapFront">
-            <img class="muscle-image split front" src="{{ url_for('static', filename='images/cuerpo.jpg') }}" alt="Mapa muscular frontal" />
-            <button class="muscle-hotspot" data-muscle="pectorales" style="left:26%;top:18%;width:20%;height:12%;"></button>
-            <button class="muscle-hotspot" data-muscle="pectorales" style="left:54%;top:18%;width:20%;height:12%;"></button>
-            <button class="muscle-hotspot" data-muscle="hombros" style="left:12%;top:14%;width:16%;height:10%;"></button>
-            <button class="muscle-hotspot" data-muscle="hombros" style="left:72%;top:14%;width:16%;height:10%;"></button>
-            <button class="muscle-hotspot" data-muscle="biceps" style="left:8%;top:24%;width:14%;height:14%;"></button>
-            <button class="muscle-hotspot" data-muscle="biceps" style="left:78%;top:24%;width:14%;height:14%;"></button>
-            <button class="muscle-hotspot" data-muscle="antebrazos" style="left:6%;top:36%;width:14%;height:12%;"></button>
-            <button class="muscle-hotspot" data-muscle="antebrazos" style="left:80%;top:36%;width:14%;height:12%;"></button>
-            <button class="muscle-hotspot" data-muscle="abdomen" style="left:32%;top:28%;width:36%;height:20%;"></button>
-            <button class="muscle-hotspot" data-muscle="cuadriceps" style="left:30%;top:50%;width:20%;height:20%;"></button>
-            <button class="muscle-hotspot" data-muscle="cuadriceps" style="left:50%;top:50%;width:20%;height:20%;"></button>
-            <button class="muscle-hotspot" data-muscle="pantorrillas" style="left:32%;top:74%;width:18%;height:18%;"></button>
-            <button class="muscle-hotspot" data-muscle="pantorrillas" style="left:50%;top:74%;width:18%;height:18%;"></button>
+          <div class="cuerpo-container">
+            {% include "partials/muscle_front.html" %}
           </div>
         </div>
 
         <div class="muscle-view" data-view="back" role="tabpanel">
-          <div class="muscle-image-wrap split" id="muscleMapBack">
-            <img class="muscle-image split back" src="{{ url_for('static', filename='images/cuerpo.jpg') }}" alt="Mapa muscular posterior" />
-            <button class="muscle-hotspot" data-muscle="trapecios" style="left:36%;top:12%;width:28%;height:10%;"></button>
-            <button class="muscle-hotspot" data-muscle="espalda" style="left:28%;top:20%;width:44%;height:24%;"></button>
-            <button class="muscle-hotspot" data-muscle="triceps" style="left:10%;top:24%;width:14%;height:14%;"></button>
-            <button class="muscle-hotspot" data-muscle="triceps" style="left:76%;top:24%;width:14%;height:14%;"></button>
-            <button class="muscle-hotspot" data-muscle="gluteos" style="left:34%;top:46%;width:32%;height:12%;"></button>
-            <button class="muscle-hotspot" data-muscle="isquios" style="left:32%;top:58%;width:36%;height:16%;"></button>
-            <button class="muscle-hotspot" data-muscle="pantorrillas" style="left:32%;top:74%;width:18%;height:18%;"></button>
-            <button class="muscle-hotspot" data-muscle="pantorrillas" style="left:50%;top:74%;width:18%;height:18%;"></button>
+          <div class="cuerpo-container">
+            {% include "partials/muscle_back.html" %}
           </div>
         </div>
       </div>
 
       <div class="muscle-info" id="muscleInfo">
-        <div class="section-title">Tierlist del musculo</div>
+        <div class="section-title">Detalle del musculo</div>
         <div class="muscle-name" id="muscleName">Selecciona un musculo</div>
-        <div class="muscle-overview" id="muscleOverview">Tip: haz click en cualquier zona marcada.</div>
+        <div class="muscle-overview" id="muscleOverview">Selecciona una zona del cuerpo.</div>
         <div class="muscle-actions">
           <a class="dash-btn primary" id="addToWorkout" href="{{ url_for('register_session') }}">Anadir al entrenamiento</a>
           <a class="dash-btn secondary" id="addToRoutine" href="{{ url_for('routines') }}">Anadir a mi rutina</a>

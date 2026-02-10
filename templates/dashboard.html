@@ -26,7 +26,7 @@
       <div>
         <div class="page-kicker">Resumen</div>
         <h1 class="page-title">MUSCLE<span class="gain">GAIN</span> / <span class="user">{{ username }}</span></h1>
-        <p class="page-subtitle">Resumen del dia con tus datos mas recientes.</p>
+        <p class="page-subtitle">Resumen de hoy.</p>
       </div>
 
       <div class="top-actions">
@@ -59,25 +59,25 @@
     <section class="panel quick-panel">
       <div class="section-title">Acciones rapidas</div>
       <div class="quick-grid">
-        <button class="quick-card" type="button" data-title="Continuar entrenamiento" data-body="Registra tu sesion actual en menos de 1 minuto. Agrega sets, peso, reps y notas." data-link="{{ url_for('register_session') }}">
+        <button class="quick-card" type="button" data-title="Continuar entrenamiento" data-body="Registra tu sesion actual. Agrega sets, peso, reps y notas." data-link="{{ url_for('register_session') }}">
           <div class="quick-title">Continuar entrenamiento</div>
-          <div class="quick-sub">Vuelve donde lo dejaste.</div>
+          <div class="quick-sub">Registro rapido.</div>
         </button>
-        <button class="quick-card" type="button" data-title="Crear rutina" data-body="Define tus dias, ejercicios y progresion. Todo editable y sin limites." data-link="{{ url_for('routines') }}">
+        <button class="quick-card" type="button" data-title="Crear rutina" data-body="Define dias y ejercicios. Todo editable." data-link="{{ url_for('routines') }}">
           <div class="quick-title">Crear rutina</div>
-          <div class="quick-sub">Ordena tu semana.</div>
+          <div class="quick-sub">Plan semanal.</div>
         </button>
-        <button class="quick-card" type="button" data-title="Registrar serie" data-body="Agrega series sueltas a tu sesion actual o inicia una nueva." data-link="{{ url_for('register_session') }}">
+        <button class="quick-card" type="button" data-title="Registrar serie" data-body="Agrega series sueltas a una sesion." data-link="{{ url_for('register_session') }}">
           <div class="quick-title">Registrar serie</div>
-          <div class="quick-sub">No pierdas detalles.</div>
+          <div class="quick-sub">Detalle limpio.</div>
         </button>
-        <button class="quick-card" type="button" data-title="Ver progreso" data-body="Mira tu historial, PR estimado y volumen por ejercicio." data-link="{{ url_for('progress') }}">
+        <button class="quick-card" type="button" data-title="Ver progreso" data-body="Historial, PR estimado y volumen por ejercicio." data-link="{{ url_for('progress') }}">
           <div class="quick-title">Ver progreso</div>
-          <div class="quick-sub">Analiza tu avance.</div>
+          <div class="quick-sub">Datos claros.</div>
         </button>
-        <button class="quick-card" type="button" data-title="Ejercicios por musculo" data-body="Explora la tierlist y guarda ideas para tu proximo entrenamiento." data-link="{{ url_for('muscle_map') }}">
+        <button class="quick-card" type="button" data-title="Ejercicios por musculo" data-body="Explora ejercicios por zona." data-link="{{ url_for('muscle_map') }}">
           <div class="quick-title">Ejercicios por musculo</div>
-          <div class="quick-sub">Selecciona en el cuerpo.</div>
+          <div class="quick-sub">Mapa corporal.</div>
         </button>
       </div>
     </section>
@@ -85,8 +85,8 @@
     <section class="today-panel minimal-today exec-panel">
       <div class="today-head">
         <div>
-          <h2>Plan del dia</h2>
-          <p class="today-sub">Que toca hoy segun tu progreso.</p>
+          <h2>Plan de hoy</h2>
+          <p class="today-sub">Sugerencia segun tus datos.</p>
         </div>
         <div class="today-badge">{{ focus.chip }}</div>
       </div>
@@ -128,7 +128,7 @@
               {% endfor %}
             {% else %}
               <div class="empty-state steps">
-                <div class="empty-title">Aun no hay sesiones</div>
+                <div class="empty-title">Sin sesiones</div>
                 <div class="empty-steps">
                   <div>1. Registra tu primera sesion.</div>
                   <div>2. Agrega al menos 3 ejercicios.</div>

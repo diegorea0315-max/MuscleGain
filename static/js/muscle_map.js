@@ -1,14 +1,14 @@
 ﻿const tierList = document.getElementById("tierList");
 const muscleName = document.getElementById("muscleName");
 const muscleOverview = document.getElementById("muscleOverview");
-const hotspots = Array.from(document.querySelectorAll(".muscle-hotspot"));
 const addToWorkout = document.getElementById("addToWorkout");
 const addToRoutine = document.getElementById("addToRoutine");
 const tabs = Array.from(document.querySelectorAll(".map-tab"));
 const views = Array.from(document.querySelectorAll(".muscle-view"));
+const muscleGroups = Array.from(document.querySelectorAll(".musculo-group"));
 
 function clearActive() {
-  hotspots.forEach((b) => b.classList.remove("active"));
+  muscleGroups.forEach((g) => g.classList.remove("active"));
 }
 
 function setView(view) {
@@ -80,13 +80,61 @@ async function loadMuscle(slug) {
   renderTiers(data.tiers || []);
 }
 
-hotspots.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    clearActive();
-    btn.classList.add("active");
-    loadMuscle(btn.dataset.muscle);
+function normalizeName(value) {
+  return (value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z]/g, "");
+}
+
+const nameToSlug = {
+  pecho: "pectorales",
+  pectorales: "pectorales",
+  biceps: "biceps",
+  bicepsizquierdo: "biceps",
+  hombro: "hombros",
+  triceps: "triceps",
+  antebrazo: "antebrazos",
+  cuadriceps: "cuadriceps",
+  abdomen: "abdomen",
+  dorsal: "espalda",
+  espalda: "espalda",
+  gluteo: "gluteos",
+  isquios: "isquios",
+  pantorrilla: "pantorrillas",
+  lumbar: "espalda",
+  espaldaalta: "trapecios",
+  deltoideposterior: "hombros",
+  trapecio: "trapecios",
+};
+
+function selectMuscleByName(name, el) {
+  const key = normalizeName(name);
+  const slug = nameToSlug[key];
+  if (!slug) return;
+  clearActive();
+  if (el) el.classList.add("active");
+  loadMuscle(slug);
+}
+
+muscleGroups.forEach((group) => {
+  const raw = group.getAttribute("onclick") || "";
+  const match = raw.match(/seleccionarMusculo\\('(.+?)'\\)/);
+  if (match) {
+    group.dataset.muscleName = match[1];
+  }
+  group.removeAttribute("onclick");
+  group.addEventListener("click", (event) => {
+    event.stopPropagation();
+    const name = group.dataset.muscleName || "";
+    selectMuscleByName(name, group);
   });
 });
+
+window.seleccionarMusculo = function seleccionarMusculo(name) {
+  selectMuscleByName(name);
+};
 
 if (tabs.length) setView("front");
 

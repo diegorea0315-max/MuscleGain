@@ -452,11 +452,11 @@ def recent_activity(user_id: int, limit: int = 5) -> list[dict]:
 
 def default_notes() -> list[str]:
     return [
-        "Constancia > intensidad.",
-        "Hoy: tecnica limpia.",
-        "Hazlo simple y repetible.",
-        "Un set bien hecho vale mas que tres apurados.",
-        "Si dudas, reduce peso y controla.",
+        "Constancia semanal.",
+        "Tecnica primero.",
+        "Menos ruido, mas registro.",
+        "Controla el rango.",
+        "Descanso cuenta.",
     ]
 
 

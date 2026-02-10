@@ -141,9 +141,5 @@ function toast(msg) {
     }
   });
 
-  // Botones CTA (de momento solo UX)
-  $("startWorkout")?.addEventListener("click", () => toast("Listo: vamos a Entrenar (siguiente paso: ruta real)."));
-  $("logSession")?.addEventListener("click", () => toast("Listo: Registrar sesión (siguiente paso: formulario real)."));
-
   render();
 })();
