@@ -23,8 +23,8 @@
   addBtn.addEventListener("click", () => {
     const clone = template.content.cloneNode(true);
     container.appendChild(clone);
-    const dayInput = container.querySelector(".routine-row:last-child .table-input");
-    if (dayInput) dayInput.focus();
+    const exerciseInput = container.querySelector(".set-row:last-child input[name='exercise[]']");
+    if (exerciseInput) exerciseInput.focus();
   });
 
   container.addEventListener("click", (event) => {
@@ -33,6 +33,79 @@
     const row = btn.closest(".set-row");
     if (row && container.children.length > 1) row.remove();
   });
+})();
+
+// Suggestion chips for session form (by muscle group)
+(function sessionSuggestions() {
+  const dataEl = document.getElementById("sessionSuggestionsData");
+  const chipsWrap = document.getElementById("sessionExerciseChips");
+  const filterSelect = document.getElementById("sessionMuscleFilter");
+  if (!dataEl || !chipsWrap) return;
+
+  let suggestions = {};
+  try {
+    suggestions = JSON.parse(dataEl.dataset.suggestions || "{}");
+  } catch (e) {
+    suggestions = {};
+  }
+  let slugMap = {};
+  try {
+    slugMap = JSON.parse(dataEl.dataset.slugMap || "{}");
+  } catch (e) {
+    slugMap = {};
+  }
+
+  let lastFocused = null;
+  document.addEventListener("focusin", (event) => {
+    if (event.target && event.target.matches("input[name='exercise[]']")) {
+      lastFocused = event.target;
+    }
+  });
+
+  function renderChips(group) {
+    chipsWrap.innerHTML = "";
+    const list = suggestions[group] || [];
+    list.forEach((ex) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "chip";
+      btn.textContent = ex;
+      btn.addEventListener("click", () => {
+        if (!lastFocused) {
+          lastFocused = document.querySelector("input[name='exercise[]']");
+        }
+        if (!lastFocused) return;
+        lastFocused.value = ex;
+        lastFocused.focus();
+      });
+      chipsWrap.appendChild(btn);
+    });
+  }
+
+  let groups = Object.keys(suggestions).filter((k) => k !== k.toLowerCase());
+  if (groups.includes("Todos")) {
+    groups = ["Todos", ...groups.filter((g) => g !== "Todos")];
+  }
+  if (filterSelect && groups.length) {
+    filterSelect.innerHTML = "";
+    groups.forEach((g) => {
+      const opt = document.createElement("option");
+      opt.value = g;
+      opt.textContent = g;
+      filterSelect.appendChild(opt);
+    });
+    filterSelect.addEventListener("change", () => renderChips(filterSelect.value));
+    const qsMuscle = new URLSearchParams(window.location.search).get("muscle");
+    const mapped = qsMuscle ? (slugMap[qsMuscle] || qsMuscle) : "";
+    if (mapped && suggestions[mapped]) {
+      filterSelect.value = mapped;
+      renderChips(mapped);
+    } else {
+      renderChips(filterSelect.value);
+    }
+  } else if (groups.length) {
+    renderChips(groups[0]);
+  }
 })();
 
 (function routineDays() {
@@ -79,34 +152,55 @@
   }
 })();
 
-(function muscleMap() {
-  const map = document.querySelector(".muscle-map");
-  const nameEl = document.getElementById("muscleName");
-  const tierEl = document.getElementById("muscleTier");
-  const notesEl = document.getElementById("muscleNotes");
-  if (!map || !nameEl || !tierEl || !notesEl) return;
+// Prefill routine form from recommended templates
+(function routineTemplates() {
+  const container = document.getElementById("routineTemplates");
+  const dayContainer = document.getElementById("dayContainer");
+  const dayTemplate = document.getElementById("dayTemplate");
+  const nameInput = document.querySelector("input[name='name']");
+  const trainBoxes = document.querySelectorAll("input[name='train_days[]']");
+  const restBoxes = document.querySelectorAll("input[name='rest_days[]']");
+  if (!container || !dayContainer || !dayTemplate || !nameInput) return;
 
-  const tierData = {
-    Pectoral: { tier: "A", note: "Prioriza presses y aperturas con control." },
-    Dorsal: { tier: "A", note: "Remo y dominadas para densidad real." },
-    Biceps: { tier: "B", note: "Curl estricto y tempo controlado." },
-    Triceps: { tier: "B", note: "Fondos y extensiones para volumen." },
-    Cuadriceps: { tier: "A", note: "Sentadilla profunda y prensa." },
-    Isquios: { tier: "A", note: "Peso muerto rumano + curl femoral." },
-    Pantorrilla: { tier: "C", note: "Frecuencia alta, rango completo." },
-  };
+  let templates = [];
+  try {
+    templates = JSON.parse(container.dataset.templates || "[]");
+  } catch (e) {
+    templates = [];
+  }
 
-  map.addEventListener("click", (event) => {
-    const target = event.target.closest(".muscle");
-    if (!target) return;
-    const name = target.getAttribute("data-muscle") || "Musculo";
-    const data = tierData[name] || { tier: "B", note: "Trabajo constante y tecnico." };
+  function clearDays() {
+    dayContainer.innerHTML = "";
+  }
 
-    map.querySelectorAll(".muscle").forEach((m) => m.classList.remove("active"));
-    target.classList.add("active");
+  function addDay(label, exercises) {
+    const clone = dayTemplate.content.cloneNode(true);
+    const row = clone.querySelector(".routine-row");
+    if (!row) return;
+    const labelInput = row.querySelector("input[name='day_label[]']");
+    const exInput = row.querySelector("textarea[name='day_exercises[]']");
+    if (labelInput) labelInput.value = label || "";
+    if (exInput) exInput.value = (exercises || []).join("\n");
+    dayContainer.appendChild(row);
+  }
 
-    nameEl.textContent = name;
-    tierEl.textContent = `Tier: ${data.tier}`;
-    notesEl.textContent = data.note;
+  function setChecks(nodes, values) {
+    const set = new Set(values || []);
+    nodes.forEach((box) => {
+      box.checked = set.has(box.value);
+    });
+  }
+
+  container.addEventListener("click", (event) => {
+    const card = event.target.closest("[data-template-index]");
+    if (!card) return;
+    const idx = Number(card.dataset.templateIndex || 0);
+    const tpl = templates[idx];
+    if (!tpl) return;
+    nameInput.value = tpl.name || "";
+    clearDays();
+    (tpl.days || []).forEach((d) => addDay(d.label, d.exercises));
+    if (trainBoxes.length) setChecks(trainBoxes, tpl.train_days || []);
+    if (restBoxes.length) setChecks(restBoxes, tpl.rest_days || []);
   });
 })();

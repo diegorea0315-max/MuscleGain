@@ -7,10 +7,10 @@
     <div class="sidebar-logo">MUSCLE<span class="gain">GAIN</span></div>
     <nav class="sidebar-menu">
       <a href="{{ url_for('dashboard') }}">Inicio</a>
-      <a class="active" href="{{ url_for('register_session') }}">Registrar sesion</a>
+      <a class="active" href="{{ url_for('register_session') }}">Registro</a>
       <a href="{{ url_for('routines') }}">Rutinas</a>
       <a href="{{ url_for('progress') }}">Progreso</a>
-      <a href="{{ url_for('muscle_map') }}">Mapa muscular</a>
+      <a href="{{ url_for('muscle_map') }}">Músculos</a>
     </nav>
     <div class="sidebar-spacer"></div>
     <a class="sidebar-logout" href="{{ url_for('logout') }}">Cerrar sesion</a>
@@ -42,11 +42,27 @@
             <label class="form-label">Duracion (min)</label>
             <input class="form-input" type="number" name="duration_min" min="0" placeholder="60">
           </div>
+          <div>
+            <label class="form-label">Rutina (opcional)</label>
+            <input class="form-input" type="text" name="routine" list="routineList" placeholder="Ej: Push/Pull/Legs">
+          </div>
         </div>
 
         <div class="form-row">
           <label class="form-label">Nota de sesion</label>
           <textarea class="form-input" name="note" rows="2" placeholder="Opcional"></textarea>
+        </div>
+
+        <div class="panel inner-panel">
+          <div class="section-title">Sugerencias por musculo</div>
+          <div class="form-grid">
+            <div>
+              <label class="form-label">Filtrar musculo</label>
+              <select id="sessionMuscleFilter" class="form-input"></select>
+            </div>
+          </div>
+          <div class="chip-list" id="sessionExerciseChips"></div>
+          <div id="sessionSuggestionsData" data-suggestions='{{ suggestions|tojson }}' data-slug-map='{{ muscle_slug_map|tojson }}'></div>
         </div>
 
         <div class="form-row">
@@ -89,8 +105,13 @@
     </section>
 
     <datalist id="exerciseList">
-      {% for ex in exercises %}
+      {% for ex in exercise_options %}
         <option value="{{ ex }}"></option>
+      {% endfor %}
+    </datalist>
+    <datalist id="routineList">
+      {% for r in routines %}
+        <option value="{{ r }}"></option>
       {% endfor %}
     </datalist>
   </main>

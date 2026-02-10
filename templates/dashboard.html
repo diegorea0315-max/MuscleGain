@@ -9,10 +9,10 @@
 
     <nav class="sidebar-menu">
       <a class="active" href="{{ url_for('dashboard') }}">Inicio</a>
-      <a href="{{ url_for('register_session') }}">Registrar sesion</a>
+      <a href="{{ url_for('register_session') }}">Registro</a>
       <a href="{{ url_for('routines') }}">Rutinas</a>
       <a href="{{ url_for('progress') }}">Progreso</a>
-      <a href="{{ url_for('muscle_map') }}">Mapa muscular</a>
+      <a href="{{ url_for('muscle_map') }}">Músculos</a>
     </nav>
 
     <div class="sidebar-spacer"></div>
@@ -32,6 +32,7 @@
       <div class="top-actions">
         <a class="dash-btn primary" href="{{ url_for('register_session') }}">Registrar sesion</a>
         <a class="dash-btn secondary" href="{{ url_for('routines') }}">Rutinas</a>
+        <button class="notes-btn" id="notesBtn" type="button">Notas</button>
       </div>
     </section>
 
@@ -52,6 +53,32 @@
         <span class="stat-label">Ultima sesion</span>
         <strong class="stat-value">{{ stats.last_label }}</strong>
         <span class="stat-hint">Registro reciente</span>
+      </div>
+    </section>
+
+    <section class="panel quick-panel">
+      <div class="section-title">Acciones rapidas</div>
+      <div class="quick-grid">
+        <button class="quick-card" type="button" data-title="Continuar entrenamiento" data-body="Registra tu sesion actual en menos de 1 minuto. Agrega sets, peso, reps y notas." data-link="{{ url_for('register_session') }}">
+          <div class="quick-title">Continuar entrenamiento</div>
+          <div class="quick-sub">Vuelve donde lo dejaste.</div>
+        </button>
+        <button class="quick-card" type="button" data-title="Crear rutina" data-body="Define tus dias, ejercicios y progresion. Todo editable y sin limites." data-link="{{ url_for('routines') }}">
+          <div class="quick-title">Crear rutina</div>
+          <div class="quick-sub">Ordena tu semana.</div>
+        </button>
+        <button class="quick-card" type="button" data-title="Registrar serie" data-body="Agrega series sueltas a tu sesion actual o inicia una nueva." data-link="{{ url_for('register_session') }}">
+          <div class="quick-title">Registrar serie</div>
+          <div class="quick-sub">No pierdas detalles.</div>
+        </button>
+        <button class="quick-card" type="button" data-title="Ver progreso" data-body="Mira tu historial, PR estimado y volumen por ejercicio." data-link="{{ url_for('progress') }}">
+          <div class="quick-title">Ver progreso</div>
+          <div class="quick-sub">Analiza tu avance.</div>
+        </button>
+        <button class="quick-card" type="button" data-title="Ejercicios por musculo" data-body="Explora la tierlist y guarda ideas para tu proximo entrenamiento." data-link="{{ url_for('muscle_map') }}">
+          <div class="quick-title">Ejercicios por musculo</div>
+          <div class="quick-sub">Selecciona en el cuerpo.</div>
+        </button>
       </div>
     </section>
 
@@ -81,7 +108,7 @@
       <div class="today-cta">
         <a class="dash-btn primary" href="{{ url_for('register_session') }}">Registrar sesion</a>
         <a class="dash-btn secondary" href="{{ url_for('progress') }}">Ver progreso</a>
-        <a class="dash-btn secondary" href="{{ url_for('muscle_map') }}">Mapa muscular</a>
+        <a class="dash-btn secondary" href="{{ url_for('muscle_map') }}">Músculos</a>
       </div>
 
       <div class="minimal-lower exec-lower">
@@ -100,7 +127,15 @@
                 </div>
               {% endfor %}
             {% else %}
-              <div class="note-line">Aun no hay sesiones registradas.</div>
+              <div class="empty-state steps">
+                <div class="empty-title">Aun no hay sesiones</div>
+                <div class="empty-steps">
+                  <div>1. Registra tu primera sesion.</div>
+                  <div>2. Agrega al menos 3 ejercicios.</div>
+                  <div>3. Revisa tu progreso semanal.</div>
+                </div>
+                <a class="btn btn-primary" href="{{ url_for('register_session') }}">Registrar sesion</a>
+              </div>
             {% endif %}
           </div>
         </div>
@@ -118,6 +153,7 @@
               <button class="note-btn" id="noteNext" type="button">Siguiente</button>
               <button class="note-btn ghost" id="noteCopy" type="button">Copiar</button>
               <button class="note-btn ghost" id="noteSave" type="button">Guardar</button>
+              <div class="note-dots" id="noteDots"></div>
             </div>
           </div>
         </div>
@@ -146,6 +182,20 @@
 </div>
 
 <div class="toast" id="toast">Listo.</div>
+
+<div class="quick-modal" id="quickModal" aria-hidden="true">
+  <div class="quick-card-modal" role="dialog" aria-modal="true">
+    <div class="quick-modal-head">
+      <h3 id="quickModalTitle">Accion</h3>
+      <button class="quick-modal-close" id="quickModalClose" type="button">x</button>
+    </div>
+    <div class="quick-modal-body" id="quickModalBody"></div>
+    <div class="quick-modal-actions">
+      <a class="btn btn-primary" id="quickModalGo" href="#">Ir ahora</a>
+      <button class="btn btn-secondary" id="quickModalCancel" type="button">Cerrar</button>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block scripts %}

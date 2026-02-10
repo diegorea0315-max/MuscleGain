@@ -111,10 +111,17 @@ def init_db(db_path: str = DATABASE) -> None:
         user_id INTEGER NOT NULL,
         name TEXT NOT NULL,
         created_at TEXT NOT NULL,
+        train_days TEXT DEFAULT '',
+        rest_days TEXT DEFAULT '',
         FOREIGN KEY (user_id) REFERENCES users(id)
     )
     """
     )
+
+    if not _column_exists(cur, "routines", "train_days"):
+        cur.execute("ALTER TABLE routines ADD COLUMN train_days TEXT DEFAULT ''")
+    if not _column_exists(cur, "routines", "rest_days"):
+        cur.execute("ALTER TABLE routines ADD COLUMN rest_days TEXT DEFAULT ''")
 
     cur.execute(
         """

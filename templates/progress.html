@@ -7,10 +7,10 @@
     <div class="sidebar-logo">MUSCLE<span class="gain">GAIN</span></div>
     <nav class="sidebar-menu">
       <a href="{{ url_for('dashboard') }}">Inicio</a>
-      <a href="{{ url_for('register_session') }}">Registrar sesion</a>
+      <a href="{{ url_for('register_session') }}">Registro</a>
       <a href="{{ url_for('routines') }}">Rutinas</a>
       <a class="active" href="{{ url_for('progress') }}">Progreso</a>
-      <a href="{{ url_for('muscle_map') }}">Mapa muscular</a>
+      <a href="{{ url_for('muscle_map') }}">Músculos</a>
     </nav>
     <div class="sidebar-spacer"></div>
     <a class="sidebar-logout" href="{{ url_for('logout') }}">Cerrar sesion</a>
@@ -49,7 +49,15 @@
             </div>
           {% endfor %}
         {% else %}
-          <div class="empty-state">Aun no hay sesiones registradas.</div>
+          <div class="empty-state steps">
+            <div class="empty-title">Sin sesiones aun</div>
+            <div class="empty-steps">
+              <div>1. Registra una sesion.</div>
+              <div>2. Incluye peso y reps.</div>
+              <div>3. Vuelve a ver tu progreso.</div>
+            </div>
+            <a class="btn btn-primary" href="{{ url_for('register_session') }}">Registrar sesion</a>
+          </div>
         {% endif %}
       </div>
     </section>
@@ -66,7 +74,14 @@
             </div>
           {% endfor %}
         {% else %}
-          <div class="empty-state">Registra sets para ver tu resumen.</div>
+          <div class="empty-state steps">
+            <div class="empty-title">Sin resumen aun</div>
+            <div class="empty-steps">
+              <div>1. Agrega sets por ejercicio.</div>
+              <div>2. Guarda varias sesiones.</div>
+              <div>3. Mira tu PR estimado.</div>
+            </div>
+          </div>
         {% endif %}
       </div>
     </section>

@@ -7,10 +7,10 @@
     <div class="sidebar-logo">MUSCLE<span class="gain">GAIN</span></div>
     <nav class="sidebar-menu">
       <a href="{{ url_for('dashboard') }}">Inicio</a>
-      <a href="{{ url_for('register_session') }}">Registrar sesion</a>
+      <a href="{{ url_for('register_session') }}">Registro</a>
       <a href="{{ url_for('routines') }}">Rutinas</a>
       <a href="{{ url_for('progress') }}">Progreso</a>
-      <a class="active" href="{{ url_for('muscle_map') }}">Mapa muscular</a>
+      <a class="active" href="{{ url_for('muscle_map') }}">Músculos</a>
       {% if is_admin %}
         <a href="{{ url_for('admin_muscle_map') }}">Admin mapa</a>
       {% endif %}
@@ -22,7 +22,7 @@
   <main class="dashboard-main">
     <section class="topbar">
       <div>
-        <div class="page-kicker">Mapa muscular</div>
+        <div class="page-kicker">Músculos</div>
         <h1 class="page-title">Selecciona un musculo</h1>
         <p class="page-subtitle">Elige vista frontal o posterior para mas precision.</p>
       </div>
@@ -73,6 +73,10 @@
         <div class="section-title">Tierlist del musculo</div>
         <div class="muscle-name" id="muscleName">Selecciona un musculo</div>
         <div class="muscle-overview" id="muscleOverview">Tip: haz click en cualquier zona marcada.</div>
+        <div class="muscle-actions">
+          <a class="dash-btn primary" id="addToWorkout" href="{{ url_for('register_session') }}">Anadir al entrenamiento</a>
+          <a class="dash-btn secondary" id="addToRoutine" href="{{ url_for('routines') }}">Anadir a mi rutina</a>
+        </div>
         <div class="tier-list" id="tierList"></div>
       </div>
     </section>

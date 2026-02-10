@@ -27,6 +27,60 @@ MUSCLES = [
     {"slug": "trapecios", "name": "Trapecios"},
 ]
 
+# Sugerencias base para autocompletar y chips por musculo.
+MUSCLE_SUGGESTIONS_BASE = {
+    "Pectorales": ["Press banca", "Press inclinado", "Fondos", "Aperturas"],
+    "Espalda": ["Dominadas", "Remo con barra", "Jalon al pecho", "Remo con mancuerna"],
+    "Hombros": ["Press militar", "Elevaciones laterales", "Face pull", "Pajaros"],
+    "Biceps": ["Curl barra", "Curl mancuernas", "Curl martillo"],
+    "Triceps": ["Fondos", "Extensiones polea", "Press frances"],
+    "Pierna": ["Sentadilla", "Prensa", "Peso muerto rumano", "Curl femoral", "Zancadas"],
+    "Gluteos": ["Hip thrust", "Puente gluteo", "Sentadilla sumo"],
+    "Abdomen": ["Plancha", "Crunch", "Elevaciones de piernas"],
+    "Pantorrillas": ["Elevaciones de talones", "Gemelo sentado"],
+}
+
+# Plantillas simples para rutinas recomendadas.
+RECOMMENDED_ROUTINES = [
+    {
+        "name": "Full Body 3 dias",
+        "tagline": "Basica y efectiva para empezar.",
+        "train_days": ["Lun", "Mie", "Vie"],
+        "rest_days": ["Mar", "Jue", "Sab", "Dom"],
+        "days": [
+            {"label": "Dia A", "exercises": ["Sentadilla", "Press banca", "Remo con barra", "Plancha"]},
+            {"label": "Dia B", "exercises": ["Peso muerto", "Press militar", "Dominadas", "Abdomen"]},
+            {"label": "Dia C", "exercises": ["Prensa", "Fondos", "Remo con mancuerna", "Gemelos"]},
+        ],
+    },
+    {
+        "name": "Upper/Lower 4 dias",
+        "tagline": "Fuerza y volumen equilibrado.",
+        "train_days": ["Lun", "Mar", "Jue", "Vie"],
+        "rest_days": ["Mie", "Sab", "Dom"],
+        "days": [
+            {"label": "Upper 1", "exercises": ["Press banca", "Remo con barra", "Press militar", "Curl biceps"]},
+            {"label": "Lower 1", "exercises": ["Sentadilla", "Curl femoral", "Gemelos", "Abdomen"]},
+            {"label": "Upper 2", "exercises": ["Press inclinado", "Dominadas", "Elevaciones laterales", "Triceps"]},
+            {"label": "Lower 2", "exercises": ["Peso muerto rumano", "Prensa", "Zancadas", "Gluteos"]},
+        ],
+    },
+    {
+        "name": "Push/Pull/Legs 6 dias",
+        "tagline": "Para frecuencia alta.",
+        "train_days": ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
+        "rest_days": ["Dom"],
+        "days": [
+            {"label": "Push 1", "exercises": ["Press banca", "Press militar", "Fondos", "Triceps"]},
+            {"label": "Pull 1", "exercises": ["Dominadas", "Remo con barra", "Curl biceps", "Face pull"]},
+            {"label": "Legs 1", "exercises": ["Sentadilla", "Prensa", "Gemelos", "Abdomen"]},
+            {"label": "Push 2", "exercises": ["Press inclinado", "Aperturas", "Elevaciones laterales"]},
+            {"label": "Pull 2", "exercises": ["Remo con mancuerna", "Jalon al pecho", "Curl martillo"]},
+            {"label": "Legs 2", "exercises": ["Peso muerto rumano", "Zancadas", "Gluteos"]},
+        ],
+    },
+]
+
 
 
 def get_db():
@@ -52,6 +106,18 @@ def safe_float(value, default=0.0) -> float:
         return float(value)
     except Exception:
         return default
+
+
+def parse_days_csv(value: str) -> set[str]:
+    return {v for v in (value or "").split(",") if v}
+
+
+def build_suggestions(user_exercises: list[str]) -> dict[str, list[str]]:
+    suggestions = {k: list(v) for k, v in MUSCLE_SUGGESTIONS_BASE.items()}
+    all_sugs = sorted({ex for items in suggestions.values() for ex in items})
+    if user_exercises:
+        suggestions["Tus ejercicios"] = sorted(set(user_exercises))
+    return {"Todos": all_sugs, **suggestions}
 
 
 def parse_rest_days(rest_days_str: str) -> set[int]:
@@ -94,6 +160,16 @@ def get_user_exercises(user_id: int) -> list[str]:
     db = get_db()
     rows = db.execute(
         "SELECT name FROM exercises WHERE user_id = ? ORDER BY name ASC",
+        (user_id,),
+    ).fetchall()
+    db.close()
+    return [r["name"] for r in rows]
+
+
+def get_user_routines(user_id: int) -> list[str]:
+    db = get_db()
+    rows = db.execute(
+        "SELECT name FROM routines WHERE user_id = ? ORDER BY id DESC",
         (user_id,),
     ).fetchall()
     db.close()
@@ -500,6 +576,10 @@ def dashboard():
 def register_session():
     user_id = int(session["user_id"])
     exercises = get_user_exercises(user_id)
+    routines = get_user_routines(user_id)
+    suggestions = build_suggestions(exercises)
+    exercise_options = sorted({ex for ex in exercises} | {ex for items in suggestions.values() for ex in items})
+    muscle_slug_map = {m["slug"]: m["name"] for m in MUSCLES}
 
     if request.method == "POST":
         workout_date = request.form.get("date", "").strip() or iso_today()
@@ -516,7 +596,15 @@ def register_session():
         has_rows = any((e or "").strip() for e in exercise_list)
         if not has_rows:
             flash("Agrega al menos un ejercicio.")
-            return render_template("session.html", exercises=exercises, today=iso_today())
+            return render_template(
+                "session.html",
+                exercises=exercises,
+                routines=routines,
+                suggestions=suggestions,
+                muscle_slug_map=muscle_slug_map,
+                exercise_options=exercise_options,
+                today=iso_today(),
+            )
 
         db = get_db()
         try:
@@ -557,7 +645,15 @@ def register_session():
         flash("Sesion registrada correctamente.")
         return redirect(url_for("progress"))
 
-    return render_template("session.html", exercises=exercises, today=iso_today())
+    return render_template(
+        "session.html",
+        exercises=exercises,
+        routines=routines,
+        suggestions=suggestions,
+        muscle_slug_map=muscle_slug_map,
+        exercise_options=exercise_options,
+        today=iso_today(),
+    )
 
 
 
@@ -569,6 +665,8 @@ def routines():
 
     if request.method == "POST":
         name = (request.form.get("name") or "").strip()
+        train_days = request.form.getlist("train_days[]")
+        rest_days = request.form.getlist("rest_days[]")
         day_labels = request.form.getlist("day_label[]")
         day_exercises = request.form.getlist("day_exercises[]")
 
@@ -579,8 +677,8 @@ def routines():
         db = get_db()
         try:
             cur = db.execute(
-                "INSERT INTO routines (user_id, name, created_at) VALUES (?, ?, ?)",
-                (user_id, name, datetime.utcnow().isoformat()),
+                "INSERT INTO routines (user_id, name, created_at, train_days, rest_days) VALUES (?, ?, ?, ?, ?)",
+                (user_id, name, datetime.utcnow().isoformat(), ",".join(train_days), ",".join(rest_days)),
             )
             routine_id = cur.lastrowid
 
@@ -625,7 +723,12 @@ def routines():
         {"id": r["id"], "name": r["name"], "days": r["days"]} for r in routines_rows
     ]
 
-    return render_template("routines.html", routines=routines_list, exercises=exercises)
+    return render_template(
+        "routines.html",
+        routines=routines_list,
+        exercises=exercises,
+        recommended=RECOMMENDED_ROUTINES,
+    )
 
 
 @app.route("/routines/<int:routine_id>/edit", methods=["GET", "POST"])
@@ -636,7 +739,7 @@ def routine_edit(routine_id: int):
 
     db = get_db()
     routine = db.execute(
-        "SELECT id, name FROM routines WHERE id = ? AND user_id = ?",
+        "SELECT id, name, train_days, rest_days FROM routines WHERE id = ? AND user_id = ?",
         (routine_id, user_id),
     ).fetchone()
 
@@ -647,6 +750,8 @@ def routine_edit(routine_id: int):
 
     if request.method == "POST":
         name = (request.form.get("name") or "").strip()
+        train_days = request.form.getlist("train_days[]")
+        rest_days = request.form.getlist("rest_days[]")
         day_labels = request.form.getlist("day_label[]")
         day_exercises = request.form.getlist("day_exercises[]")
 
@@ -656,7 +761,10 @@ def routine_edit(routine_id: int):
             return redirect(url_for("routine_edit", routine_id=routine_id))
 
         try:
-            db.execute("UPDATE routines SET name = ? WHERE id = ? AND user_id = ?", (name, routine_id, user_id))
+            db.execute(
+                "UPDATE routines SET name = ?, train_days = ?, rest_days = ? WHERE id = ? AND user_id = ?",
+                (name, ",".join(train_days), ",".join(rest_days), routine_id, user_id),
+            )
 
             db.execute(
                 "DELETE FROM routine_exercises WHERE routine_day_id IN (SELECT id FROM routine_days WHERE routine_id = ?)",
@@ -709,6 +817,8 @@ def routine_edit(routine_id: int):
         routine={"id": routine["id"], "name": routine["name"]},
         days=days,
         exercises=exercises,
+        train_days=parse_days_csv(routine["train_days"]),
+        rest_days=parse_days_csv(routine["rest_days"]),
     )
 
 

@@ -2,6 +2,8 @@
 const muscleName = document.getElementById("muscleName");
 const muscleOverview = document.getElementById("muscleOverview");
 const hotspots = Array.from(document.querySelectorAll(".muscle-hotspot"));
+const addToWorkout = document.getElementById("addToWorkout");
+const addToRoutine = document.getElementById("addToRoutine");
 const tabs = Array.from(document.querySelectorAll(".map-tab"));
 const views = Array.from(document.querySelectorAll(".muscle-view"));
 
@@ -73,6 +75,8 @@ async function loadMuscle(slug) {
   if (!data.ok) return;
   muscleName.textContent = data.info.name || slug;
   muscleOverview.innerHTML = data.info.overview_html || "Sin resumen por ahora.";
+  if (addToWorkout) addToWorkout.href = `/session/new?muscle=${encodeURIComponent(slug)}`;
+  if (addToRoutine) addToRoutine.href = `/routines?muscle=${encodeURIComponent(slug)}`;
   renderTiers(data.tiers || []);
 }
 

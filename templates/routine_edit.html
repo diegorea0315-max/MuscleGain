@@ -1,4 +1,5 @@
 ﻿{% extends "base.html" %}
+{% set week_days = ["Lun","Mar","Mie","Jue","Vie","Sab","Dom"] %}
 {% block title %}Editar rutina | MuscleGain{% endblock %}
 
 {% block content %}
@@ -7,10 +8,10 @@
     <div class="sidebar-logo">MUSCLE<span class="gain">GAIN</span></div>
     <nav class="sidebar-menu">
       <a href="{{ url_for('dashboard') }}">Inicio</a>
-      <a href="{{ url_for('register_session') }}">Registrar sesion</a>
+      <a href="{{ url_for('register_session') }}">Registro</a>
       <a class="active" href="{{ url_for('routines') }}">Rutinas</a>
       <a href="{{ url_for('progress') }}">Progreso</a>
-      <a href="{{ url_for('muscle_map') }}">Mapa muscular</a>
+      <a href="{{ url_for('muscle_map') }}">Músculos</a>
     </nav>
     <div class="sidebar-spacer"></div>
     <a class="sidebar-logout" href="{{ url_for('logout') }}">Cerrar sesion</a>
@@ -36,6 +37,30 @@
         <div class="form-row">
           <label class="form-label">Nombre de rutina</label>
           <input class="form-input" type="text" name="name" value="{{ routine.name }}" required>
+        </div>
+
+        <div class="form-row">
+          <div class="section-title">Dias de entrenamiento</div>
+          <div class="chip-list">
+            {% for d in week_days %}
+              <label class="chip checkbox-chip">
+                <input type="checkbox" name="train_days[]" value="{{ d }}" {% if d in train_days %}checked{% endif %}>
+                <span>{{ d }}</span>
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="section-title">Dias de descanso</div>
+          <div class="chip-list">
+            {% for d in week_days %}
+              <label class="chip checkbox-chip">
+                <input type="checkbox" name="rest_days[]" value="{{ d }}" {% if d in rest_days %}checked{% endif %}>
+                <span>{{ d }}</span>
+              </label>
+            {% endfor %}
+          </div>
         </div>
 
         <div class="routine-table-wrap">
