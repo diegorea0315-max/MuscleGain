@@ -120,10 +120,13 @@ function selectMuscleByName(name, el) {
 
 muscleGroups.forEach((group) => {
   const raw = group.getAttribute("onclick") || "";
-  const match = raw.match(/seleccionarMusculo\\('(.+?)'\\)/);
-  if (match) {
-    group.dataset.muscleName = match[1];
+  let match = raw.match(/seleccionarMusculo\('(.+?)'\)/);
+  if (!match) {
+    const child = group.querySelector("[onclick*='seleccionarMusculo']");
+    const childRaw = child ? child.getAttribute("onclick") : "";
+    match = childRaw ? childRaw.match(/seleccionarMusculo\('(.+?)'\)/) : null;
   }
+  if (match) group.dataset.muscleName = match[1];
   group.removeAttribute("onclick");
   group.addEventListener("click", (event) => {
     event.stopPropagation();
